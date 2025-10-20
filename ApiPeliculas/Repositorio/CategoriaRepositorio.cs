@@ -12,41 +12,47 @@ public class CategoriaRepositorio : ICategoriaRepositorio
     }
     public bool ActualizarCategoria(Categoria categoria)
     {
-        throw new NotImplementedException();
+        categoria.FechaCreacion = DateTime.Now;
+        _db.Categoria.Update(categoria);
+        return Guardar();
     }
 
     public bool BorrarCategoria(Categoria categoria)
     {
-        throw new NotImplementedException();
+        _db.Categoria.Remove(categoria);
+        return Guardar();
     }
 
     public bool CrearCategoria(Categoria categoria)
     {
-        throw new NotImplementedException();
+        categoria.FechaCreacion = DateTime.Now;
+        _db.Categoria.Add(categoria);
+        return Guardar();
     }
 
     public bool ExisteCategoria(int CategoriaId)
     {
-        throw new NotImplementedException();
+        return _db.Categoria.Any(c => c.Id == CategoriaId);
     }
 
     public bool ExisteCategoria(string nombre)
     {
-        throw new NotImplementedException();
+        bool valor = _db.Categoria.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
+        return valor;
     }
 
     public Categoria GetCategoria(int CategoriaId)
     {
-        throw new NotImplementedException();
+        return _db.Categoria.FirstOrDefault(c => c.Id == CategoriaId);
     }
 
     public ICollection<Categoria> GetCategorias()
     {
-        throw new NotImplementedException();
+        return _db.Categoria.OrderBy(c => c.Nombre).ToList();
     }
 
-    public bool Guardar(Categoria categoria)
+    public bool Guardar()
     {
-        throw new NotImplementedException();
+        return _db.SaveChanges() > 0 ? true : false ;
     }
 }

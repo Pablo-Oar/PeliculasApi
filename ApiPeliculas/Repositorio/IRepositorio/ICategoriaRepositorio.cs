@@ -11,5 +11,6 @@ namespace ApiPeliculas.Repositorio.IRepositorio
         bool CrearCategoria(Categoria categoria);
         bool ActualizarCategoria(Categoria categoria);
         bool BorrarCategoria(Categoria categoria);
-        bool Guardar(Categoria categoria);
+        bool Guardar();
     }
+}
