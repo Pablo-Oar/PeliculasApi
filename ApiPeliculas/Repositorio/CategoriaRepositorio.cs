@@ -13,42 +13,52 @@ public class CategoriaRepositorio : ICategoriaRepositorio
     public bool ActualizarCategoria(Categoria categoria)
     {
         categoria.FechaCreacion = DateTime.Now;
-        _db.Categoria.Update(categoria);
+        //Arreglar problema del PUT
+        var categoriaExistente = _db.Categorias.Find(categoria.Id);
+        if (categoriaExistente != null)
+        {
+            _db.Entry(categoriaExistente).CurrentValues.SetValues(categoria);
+        }
+        else
+        {
+            _db.Categorias.Update(categoria);
+        }
+            
         return Guardar();
     }
 
     public bool BorrarCategoria(Categoria categoria)
     {
-        _db.Categoria.Remove(categoria);
+        _db.Categorias.Remove(categoria);
         return Guardar();
     }
 
     public bool CrearCategoria(Categoria categoria)
     {
         categoria.FechaCreacion = DateTime.Now;
-        _db.Categoria.Add(categoria);
+        _db.Categorias.Add(categoria);
         return Guardar();
     }
 
     public bool ExisteCategoria(int CategoriaId)
     {
-        return _db.Categoria.Any(c => c.Id == CategoriaId);
+        return _db.Categorias.Any(c => c.Id == CategoriaId);
     }
 
     public bool ExisteCategoria(string nombre)
     {
-        bool valor = _db.Categoria.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
+        bool valor = _db.Categorias.Any(c => c.Nombre.ToLower().Trim() == nombre.ToLower().Trim());
         return valor;
     }
 
     public Categoria GetCategoria(int CategoriaId)
     {
-        return _db.Categoria.FirstOrDefault(c => c.Id == CategoriaId);
+        return _db.Categorias.FirstOrDefault(c => c.Id == CategoriaId);
     }
 
     public ICollection<Categoria> GetCategorias()
     {
-        return _db.Categoria.OrderBy(c => c.Nombre).ToList();
+        return _db.Categorias.OrderBy(c => c.Nombre).ToList();
     }
 
     public bool Guardar()
