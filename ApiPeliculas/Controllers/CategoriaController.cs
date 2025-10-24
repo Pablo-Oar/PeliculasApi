@@ -10,6 +10,7 @@ namespace ApiPeliculas.Controllers
     //[Route("api/[controller]")] //Opcion estatica
     [Route("api/categorias")]
     [ApiController]
+    //El controlador es el encargado de orquestar todo y llamar a los servicios quienes contienen la logica.
     public class CategoriaController : ControllerBase
     {
         private readonly ICategoriaRepositorio _cRepo;

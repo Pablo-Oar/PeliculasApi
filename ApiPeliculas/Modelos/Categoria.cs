@@ -2,6 +2,7 @@
 
 namespace ApiPeliculas.Modelos
 {
+    //Entidad categoria model --> a partir de esto se pueden crear muchos DTOs para no exponer el model directamente.
     public class Categoria
     {
         [Key]
