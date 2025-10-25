@@ -3,8 +3,6 @@ using ApiPeliculas.Modelos; // Importa las entidades del modelo (Pelicula)
 using ApiPeliculas.Repositorio.IRepositorio; // Importa la interfaz del repositorio
 using Microsoft.EntityFrameworkCore; // Importa funciones de Entity Framework Core
 
-namespace ApiPeliculas.Repositorio
-{
     // Implementa la interfaz IPeliculaRepositorio
     public class PeliculaRepositorio : IPeliculaRepositorio
     {
@@ -18,9 +16,19 @@ namespace ApiPeliculas.Repositorio
         // Actualiza una película existente en la base de datos
         public bool ActualizarPelicula(Pelicula pelicula)
         {
-            pelicula.FechaCreacion = DateTime.Now; // Actualiza la fecha de creación          
-            _db.Update(pelicula); // Marca la entidad como modificada           
-            return Guardar(); // Guarda los cambios y devuelve el resultado
+            pelicula.FechaCreacion = DateTime.Now; // Actualiza la fecha de creación
+            // Arreglar problema del PATCH
+            var peliculaExistente = _db.Pelicula.Find(pelicula.Id);
+            if (peliculaExistente != null)
+            {
+                _db.Entry(peliculaExistente).CurrentValues.SetValues(pelicula);
+            }
+            else
+            {
+                _db.Pelicula.Update(pelicula);
+            }
+
+            return Guardar();
         }
 
         // Elimina una película de la base de datos
@@ -81,4 +89,3 @@ namespace ApiPeliculas.Repositorio
             return _db.SaveChanges() > 0 ? true : false; // Devuelve true si se afectó al menos una fila
         }
     }
-}
