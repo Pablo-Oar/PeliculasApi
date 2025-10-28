@@ -31,9 +31,9 @@ namespace ApiPeliculas.Repositorio
              return _db.Usuario.OrderBy(lUsers => lUsers.Nombre ).ToList();
         }
 
-        public bool IsUniqueUser(string usuario)
+        public bool IsUniqueUser(string nombreUsuario)
         {
-            var usuariBd = _db.Usuario.FirstOrDefault(usBd => usBd.NombreUsuario == usuario);
+            var usuariBd = _db.Usuario.FirstOrDefault(usBd => usBd.NombreUsuario == nombreUsuario);
             if (usuariBd == null)
             {
                 return false;
