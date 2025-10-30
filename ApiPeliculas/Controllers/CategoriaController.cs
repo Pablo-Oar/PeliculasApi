@@ -2,12 +2,14 @@
 using ApiPeliculas.Modelos.DTOs;
 using ApiPeliculas.Repositorio.IRepositorio;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiPeliculas.Controllers
 {
     //[Route("api/[controller]")] // Ruta dinámica, se reemplaza por el nombre del controlador
+    [Authorize]
     [Route("api/categorias")]  // Ruta fija base del controlador
     [ApiController]// Habilita validación automática del modelo y comportamiento de API
     //El controlador es el encargado de orquestar las peticiones y llamar a la logica del repositorio
