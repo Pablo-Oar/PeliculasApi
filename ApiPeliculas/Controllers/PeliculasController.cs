@@ -2,6 +2,7 @@
 using ApiPeliculas.Modelos.DTOs; // Importa los DTOs (objetos de transferencia de datos)
 using ApiPeliculas.Repositorio.IRepositorio; // Importa las interfaces de los repositorios
 using AutoMapper; // Importa AutoMapper para mapear entre entidades y DTOs
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; // Para usar los controladores y atributos MVC
 
 namespace ApiPeliculas.Controllers
@@ -19,7 +20,7 @@ namespace ApiPeliculas.Controllers
             _pelRepo = pelRepo; // Inyección del repositorio
             _mapper = mapper; // Inyección del mapper
         }
-
+        [AllowAnonymous]
         [HttpGet("[action]", Name = "GetPeliculas")] // GET api/peliculas/GetPeliculas
         [ProducesResponseType(StatusCodes.Status403Forbidden)] // Documenta posibles respuestas
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -35,7 +36,8 @@ namespace ApiPeliculas.Controllers
             }
 
             return Ok(listaPeliculasDto); // Devuelve 200 con la lista en formato DTO
-        } 
+        }
+        [AllowAnonymous]
         [HttpGet("[action]/{peliculaId:int}", Name = "GetPelicula")] // GET api/peliculas/GetPelicula/{peliculaId}
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -54,6 +56,7 @@ namespace ApiPeliculas.Controllers
 
             return Ok(itemPeliculaDto);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost("[action]", Name = "CrearPelicula")] // POST api/peliculas/CrearPelicula
         [ProducesResponseType(201, Type = typeof(PeliculaDto))] // Define tipos de respuesta esperados
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -88,6 +91,7 @@ namespace ApiPeliculas.Controllers
 
             return CreatedAtRoute("CrearPelicula", new { peliculaId = pelicula.Id }, pelicula); // Retorna 201 con la URL del recurso creado
         }
+        [Authorize(Roles = "Admin")]
         [HttpPatch("[action]/{peliculaId:int}", Name = "ActualizarPatchPelicula")] // PATCH api/peliculas/ActualizarPelicula/{peliculaId}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -125,6 +129,7 @@ namespace ApiPeliculas.Controllers
              
             return NoContent(); // Devuelve 204 sin contenido
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("[action]/{peliculaId:int}", Name = "BorrarPelicula")] // DELETE api/peliculas/BorrarPelicula/{peliculaId}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -149,6 +154,7 @@ namespace ApiPeliculas.Controllers
 
             return NoContent();
         }
+        [AllowAnonymous]
         [HttpGet("[action]/{categoriaId:int}", Name = "GetPeliculasEnCategoria")] // GET api/peliculas/GetPeliculasEnCategoria/{categoriaId}
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -170,6 +176,7 @@ namespace ApiPeliculas.Controllers
 
             return Ok(itemPelicula); // Devuelve 200 con la lista
         }
+        [AllowAnonymous]
         [HttpGet("[action]", Name = "BuscarPelicula")] // GET api/peliculas/BuscarPelicula/{nombre}
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

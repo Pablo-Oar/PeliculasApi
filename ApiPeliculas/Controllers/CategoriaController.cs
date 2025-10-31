@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ApiPeliculas.Controllers
 {
     //[Route("api/[controller]")] // Ruta dinámica, se reemplaza por el nombre del controlador
-    [Authorize]
+    //[Authorize(Roles = "Admin")]
     [Route("api/categorias")]  // Ruta fija base del controlador
     [ApiController]// Habilita validación automática del modelo y comportamiento de API
     //El controlador es el encargado de orquestar las peticiones y llamar a la logica del repositorio
@@ -23,7 +23,7 @@ namespace ApiPeliculas.Controllers
             _cRepo = cRepo;
             _mapper = mapper;
         }
-
+        [AllowAnonymous]
         [HttpGet("[action]", Name = "GetCategorias")] // GET api/categorias/GetCategorias
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -40,7 +40,7 @@ namespace ApiPeliculas.Controllers
 
             return Ok(listaCategoriasDto);
         }
-
+        [AllowAnonymous]
         [HttpGet("[action]/{categoriaId:int}", Name = "GetCategoria")] // GET api/categorias/GetCategoria
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,7 +59,7 @@ namespace ApiPeliculas.Controllers
 
             return Ok(itemCategoriaDto);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost("[action]", Name = "CrearCategoria")] // POST api/categorias/CrearCategoria
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -93,7 +93,7 @@ namespace ApiPeliculas.Controllers
 
             return CreatedAtRoute("GetCategoria", new {categoriaId = categoria.Id}, categoria);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPatch("[action]/{categoriaId:int}", Name = "ActualizarCategoria")] // PATCH api/categorias/ActualizarCategoria/{categoriaId}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -131,7 +131,7 @@ namespace ApiPeliculas.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("[action]/{categoriaId:int}", Name = "ActualizarPutCategoria")] // PUT api/categorias/ActualizarPutCategoria/{categoriaId}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -171,7 +171,7 @@ namespace ApiPeliculas.Controllers
 
             return NoContent();
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpDelete("[action]/{categoriaId:int}", Name = "BorrarCategoria")] // DELETE api/categorias/BorrarCategoria/{categoriaId}
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
